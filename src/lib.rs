@@ -91,7 +91,7 @@ impl Contract {
         }
     }
 }
-/*
+
 fn main() {
     let mut contract = Contract::new();
     let id: AccountId = "pepe.near".parse().unwrap();
@@ -99,78 +99,4 @@ fn main() {
     contract.add_experience(id.clone(), "experience 1".to_string(), "https://video.de/pepe".to_string(), 12, "descripcion video pepe".to_string(), 1200, 3000);
     let rew = contract.get_reward(id.clone(), 0);
     println!("{:?}", rew);
-}*/
-/*
-#[cfg(all(test, not(target_arch = "wasm32")))]
-#[cfg(test)]
-mod tests {
-    use near_sdk::test_utils::{accounts, VMContextBuilder};
-    use near_sdk::MockedBlockchain;
-    use near_sdk::{testing_env, Balance};
-
-    use super::*;
-
-    const TOTAL_SUPPLY: Balance = 1_000_000_000_000_000;
-
-    fn get_context(predecessor_account_id: AccountId) -> VMContextBuilder {
-        let mut builder = VMContextBuilder::new();
-        builder
-            .current_account_id(accounts(1))
-            .signer_account_id(predecessor_account_id.clone())
-            .predecessor_account_id(predecessor_account_id);
-        builder
-    }
-
-    #[test]
-    fn test_new() {
-        let mut context = get_context(accounts(1));
-        testing_env!(context.build());
-        let mut contract = Contract::new();
-        testing_env!(context.is_view(true).build());
-        let wal = accounts(1);
-        contract.new_user(wal.clone());
-        //let title = "vid_test1".to_string();
-        //let url = "https://test1".to_string();
-        //let budg: u128 = 125;
-        //contract.add_video(wal, title, url, budg);
-    }
-
-    #[test]
-    #[should_panic(expected = "The contract is not initialized")]
-    fn test_default() {
-        let context = get_context(accounts(1));
-        testing_env!(context.build());
-        let _contract = Contract::default();
-    }
-
-    #[test]
-    fn test_transfer() {
-        let mut context = get_context(accounts(2));
-        testing_env!(context.build());
-        let mut contract = Contract::new_default_meta(accounts(2).into(), TOTAL_SUPPLY.into());
-        testing_env!(context
-            .storage_usage(env::storage_usage())
-            .attached_deposit(contract.storage_balance_bounds().min.into())
-            .predecessor_account_id(accounts(1))
-            .build());
-        // Paying for account registration, aka storage deposit
-        contract.storage_deposit(None, None);
-
-        testing_env!(context
-            .storage_usage(env::storage_usage())
-            .attached_deposit(1)
-            .predecessor_account_id(accounts(2))
-            .build());
-        let transfer_amount = TOTAL_SUPPLY / 3;
-        contract.ft_transfer(accounts(1), transfer_amount.into(), None);
-
-        testing_env!(context
-            .storage_usage(env::storage_usage())
-            .account_balance(env::account_balance())
-            .is_view(true)
-            .attached_deposit(0)
-            .build());
-        assert_eq!(contract.ft_balance_of(accounts(2)).0, (TOTAL_SUPPLY - transfer_amount));
-        assert_eq!(contract.ft_balance_of(accounts(1)).0, transfer_amount);
-    }
-}*/
+}

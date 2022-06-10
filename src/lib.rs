@@ -60,12 +60,15 @@ impl Contract {
             fee: 10,
         }
     }
+    
     pub fn new_user(&mut self, wallet: AccountId, n: String, disc: String, mail: String, interst: u8){
         //assert wallet
         self.users.insert(&wallet.clone(), &User{name: n, discord: disc, email: mail, interests: interst, my_exp: Vec::new(), pov_exp: Vec::new(), date: 0});
     }
-    pub fn add_experience(&mut self, wallet: AccountId, exp_title: String, v_link: String, amount: u128, desc: String, t: u16, date: i64){
+    
+    pub fn add_experience(&mut self, wallet: AccountId, exp_title: String, v_link: String, amount: u128, desc: String, t: u16, date: i64, interest: u8){
         //assert wallet
+        self.n_exp += 1;
         self.experience.insert(&self.n_exp.clone(),
         &Experience{title: exp_title.clone(),
             owner: wallet.clone(),
@@ -75,28 +78,58 @@ impl Contract {
             moment: "".to_string(),
             time : t,
             pov: UnorderedMap::new(b"m"),
-            areas: 0,
+            areas: interest.clone(),
             exp_date: date
         });
-        self.n_exp += 1;
-    }
-    pub fn get_reward(&mut self, wallet: AccountId, video_n: u128) -> u128{
-        let exp = (self.experience.get(&video_n.clone())).unwrap();
-        let reward = exp.reward;
-        if exp.owner == wallet {
-            reward
+        if self.exp_by_area.contains_key(&interest.clone()){
+            let mut vec = self.exp_by_area.get(&interest.clone()).unwrap();
+            vec.push(self.n_exp.clone());
+            self.exp_by_area.insert(&interest.clone(), &vec);
         }
         else{
-            0
+            self.exp_by_area.insert(&interest.clone(), &Vec::new());
+            let mut vec = self.exp_by_area.get(&interest.clone()).unwrap();
+            vec.push(self.n_exp.clone());
+            self.exp_by_area.insert(&interest.clone(), &vec);
         }
+        let mut usr = self.users.get(&wallet.clone()).unwrap();
+        usr.my_exp.push(self.n_exp.clone());
+        self.users.insert(&wallet.clone(), &usr);
+    }
+    
+    pub fn get_reward(&self, video_n: u128) -> u128{
+        let exp = (self.experience.get(&video_n.clone())).unwrap();
+        exp.reward
+    }
+
+    pub fn get_url(&self, video_n: u128) -> String{
+        let exp = self.experience.get(&video_n.clone()).unwrap();
+        exp.url
+    }
+
+    pub fn get_exp_by_area(&self, area: u8) -> Vec<u128>{
+        self.exp_by_area.get(&area).unwrap()
+    }
+
+    pub fn get_usr_exp(&self, wallet: AccountId) -> Vec<u128>{
+        let usr = self.users.get(&wallet.clone()).unwrap();
+        usr.my_exp
     }
 }
 
 fn main() {
     let mut contract = Contract::new();
     let id: AccountId = "pepe.near".parse().unwrap();
+    let id2: AccountId = "bob.near".parse().unwrap();
     contract.new_user(id.clone(), "pepe".to_string(), "pepediscord".to_string(), "pepemail".to_string(), 8);
-    contract.add_experience(id.clone(), "experience 1".to_string(), "https://video.de/pepe".to_string(), 12, "descripcion video pepe".to_string(), 1200, 3000);
-    let rew = contract.get_reward(id.clone(), 0);
-    println!("{:?}", rew);
+    for n in 1..20{
+        contract.add_experience(id.clone(), "experience 1".to_string(), "https://video.de/pepe".to_string(), 12, "descripcion video pepe".to_string(), 1200, 3000, 2);
+    }
+    contract.new_user(id2.clone(), "bob".to_string(), "bobdiscord".to_string(), "bobmail".to_string(), 7);
+    contract.add_experience(id2.clone(), "experience 2".to_string(), "https://video.de/bob".to_string(), 20, "descripcion video bob".to_string(), 100, 4000, 2);
+    let rew = contract.get_reward(1);
+    println!("reward for experience 1 = {:?}", rew);
+    println!("url = {}", contract.get_url(1));
+    println!("pepe's experiences = {:?}", contract.get_usr_exp(id.clone()));
+    println!("experiences on area 2 = {:?}", contract.get_exp_by_area(2));
 }

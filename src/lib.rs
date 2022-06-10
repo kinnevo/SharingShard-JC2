@@ -96,15 +96,43 @@ impl Contract {
         usr.my_exp.push(self.n_exp.clone());
         self.users.insert(&wallet.clone(), &usr);
     }
+
+    pub fn get_title(&self, video_n: u128) -> String{
+        self.experience.get(&video_n.clone()).unwrap().title
+    }
     
-    pub fn get_reward(&self, video_n: u128) -> u128{
-        let exp = (self.experience.get(&video_n.clone())).unwrap();
-        exp.reward
+    pub fn get_description(&self, video_n: u128) -> String{
+        self.experience.get(&video_n.clone()).unwrap().description
     }
 
     pub fn get_url(&self, video_n: u128) -> String{
         let exp = self.experience.get(&video_n.clone()).unwrap();
         exp.url
+    }
+
+    pub fn get_area(&self, video_n: u128) -> u8 {
+        self.experience.get(&video_n.clone()).unwrap().areas
+    }
+
+    pub fn get_reward(&self, video_n: u128) -> u128{
+        let exp = (self.experience.get(&video_n.clone())).unwrap();
+        exp.reward
+    }
+
+    pub fn get_expiration_date(&self, video_n: u128) ->i64{
+        self.experience.get(&video_n).unwrap().exp_date
+    }
+
+    pub fn get_moment_coment(&self, video_n: u128) ->String{
+        self.experience.get(&video_n).unwrap().moment
+    }
+
+    pub fn get_moment_time(&self, video_n: u128) ->u16{
+        self.experience.get(&video_n).unwrap().time
+    }
+
+    pub fn get_pov_of_vid(&self, video_n: u128) ->UnorderedMap<AccountId,String>{
+        self.experience.get(&video_n).unwrap().pov
     }
 
     pub fn get_exp_by_area(&self, area: u8) -> Vec<u128>{

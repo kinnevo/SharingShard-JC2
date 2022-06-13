@@ -1,14 +1,24 @@
 # SharingShard
 
+***
+** Deploying contract **
+***
 Use near-cli to deploy the smart contract to NEAR test network:
 
 `near deploy --wasmFile target/wasm32-unknown-unknown/release/SharingShard.wasm --accountId <YOUR_ACCOUNT_HERE>`
 
 
+***
+** Initializing **
+***
+
 Initializing contract:
 
 `near call <YOUR_ACCOUNT_HERE> new --accountId <YOUR_ACCOUNT_HERE>`
 
+***
+** Setters **
+***
 
 Add new user:
 

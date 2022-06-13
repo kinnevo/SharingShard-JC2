@@ -145,8 +145,8 @@ impl Contract {
         self.experience.get(&video_n).unwrap().pov
     }
 
-    pub fn get_exp_by_area(&self, area: u8) -> Vec<u128>{
-        self.exp_by_topic.get(&area).unwrap()
+    pub fn get_exp_by_topic(&self, topic: u8) -> Vec<u128>{
+        self.exp_by_topic.get(&topic).unwrap()
     }
 
     pub fn get_user_name(&self, wallet: AccountId) ->String{
@@ -177,6 +177,10 @@ impl Contract {
     pub fn get_user_date(&self, wallet: AccountId) ->i64{
         self.users.get(&wallet).unwrap().date
     }
+
+    pub fn get_number_of_experiences(&self) ->u128{
+        self.n_exp
+    }
 }
 
 fn main() {
@@ -193,5 +197,5 @@ fn main() {
     println!("reward for experience 1 = {:?}", rew);
     println!("url = {}", contract.get_url(1));
     println!("pepe's experiences = {:?}", contract.get_user_exp(id.clone()));
-    println!("experiences on area 2 = {:?}", contract.get_exp_by_area(2));
+    println!("experiences on area 2 = {:?}", contract.get_exp_by_topic(2));
 }

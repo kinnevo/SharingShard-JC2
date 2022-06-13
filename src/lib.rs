@@ -157,7 +157,7 @@ impl Contract {
         self.users.get(&wallet).unwrap().discord
     }
 
-    pub fn get_user_emal(&self, wallet: AccountId) ->String{
+    pub fn get_user_email(&self, wallet: AccountId) ->String{
         self.users.get(&wallet).unwrap().email
     }
 
@@ -192,10 +192,27 @@ fn main() {
         contract.add_experience(id.clone(), "experience 1".to_string(), "descripcion video pepe".to_string(), "https://video.de/pepe".to_string(), 12, 1200, 2);
     }
     contract.new_user(id2.clone(), "bob".to_string(), "bobdiscord".to_string(), "bobmail".to_string(), 7);
-    contract.add_experience(id2.clone(), "experience 2".to_string(), "descripcion video bob".to_string(), "https://video.de/bob".to_string(), 20, 100, 2);
+    let exp = contract.add_experience(id2.clone(), "experience 2".to_string(), "descripcion video bob".to_string(), "https://video.de/bob".to_string(), 20, 100, 2);
+    contract.add_moment(id2.clone(), exp.clone(), 120, "bob moment".to_string());
     let rew = contract.get_reward(1);
     println!("reward for experience 1 = {:?}", rew);
     println!("url = {}", contract.get_url(1));
+    println!("{} experience title = {:?}", exp, contract.get_title(exp));
+    println!("{} experience description = {:?}", exp, contract.get_description(exp));
+    println!("{} experience video url = {:?}", exp, contract.get_url(exp));
+    println!("{} experience topic = {:?}", exp, contract.get_topic(exp));
+    println!("{} experience reward = {:?}", exp, contract.get_reward(exp));
+    println!("{} experience expiration date = {:?}", exp, contract.get_expiration_date(exp));
+    println!("{} experience moment comment = {:?}", exp, contract.get_moment_coment(exp));
+    println!("{} experience moment time = {:?}", exp, contract.get_moment_time(exp));
+    println!("{} experience points of view = {:?}", exp, contract.get_pov_of_vid(exp));
     println!("pepe's experiences = {:?}", contract.get_user_exp(id.clone()));
     println!("experiences on area 2 = {:?}", contract.get_exp_by_topic(2));
+    println!("{} user name = {:?}", id, contract.get_user_name(id.clone()));
+    println!("{} user discord = {:?}", id, contract.get_user_discord(id.clone()));
+    println!("{} user email = {:?}", id, contract.get_user_email(id.clone()));
+    println!("{} user interests = {:?}", id, contract.get_user_interests(id.clone()));
+    println!("experiences {} has left a pov = {:?}", id.clone(), contract.get_user_exp_pov(id.clone()));
+    println!("last date {} commented = {:?}", id.clone(), contract.get_user_date(id.clone()));
+    println!("total of experiences = {}", contract.get_number_of_experiences());
 }

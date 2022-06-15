@@ -1,11 +1,19 @@
 # SharingShard
 
+source $HOME/.cargo/env
+rustup target add wasm32-unknown-unknown
+cargo build --target wasm32-unknown-unknown --release
+
+near deploy --wasmFile target/wasm32-unknown-unknown/release/near_sharingshard.wasm --accountId ss2022_jc.testnet
+
+
+
 ***
 ** Deploying contract **
 ***
 Use near-cli to deploy the smart contract to NEAR test network:
 
-`near deploy --wasmFile target/wasm32-unknown-unknown/release/SharingShard.wasm --accountId <YOUR_ACCOUNT_HERE>`
+near deploy --wasmFile target/wasm32-unknown-unknown/release/SharingShard.wasm --accountId ss2022_jc.testnet
 
 
 ***
